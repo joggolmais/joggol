@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { GameActions } from './GameActions';
+import { InviteSharePanel } from './InviteSharePanel';
 
 // This route accesses cookies() and params at the top level — allow blocking render
 export const instant = false;
@@ -233,6 +234,13 @@ async function GameDetailContent({ gameId }: { gameId: string }) {
             </div>
           )}
         </section>
+
+        {/* Invite Share Panel (only for organizers/admins or when game is open) */}
+        {['aberta', 'confirmacoes_fechadas', 'rascunho'].includes(game.status) && (
+          <section>
+            <InviteSharePanel gameId={gameId} gameTitle={game.title} />
+          </section>
+        )}
       </div>
     </main>
   );
