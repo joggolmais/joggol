@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { GameActions } from './GameActions';
 import { InviteSharePanel } from './InviteSharePanel';
+import { ParticipantManager } from './ParticipantManager';
 
 // This route accesses cookies() and params at the top level — allow blocking render
 export const instant = false;
@@ -234,6 +235,19 @@ async function GameDetailContent({ gameId }: { gameId: string }) {
             </div>
           )}
         </section>
+
+        {/* Organizer: Participant Manager (only for admins/organizers/owners) */}
+        {['owner', 'admin', 'organizer'].includes(orgMember.role) && participants && participants.length > 0 && (
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-semibold text-white">Gerenciar Participantes</h3>
+              <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+                Painel do Organizador
+              </span>
+            </div>
+            <ParticipantManager gameId={gameId} participants={participants} />
+          </section>
+        )}
 
         {/* Invite Share Panel (only for organizers/admins or when game is open) */}
         {['aberta', 'confirmacoes_fechadas', 'rascunho'].includes(game.status) && (
